@@ -1,0 +1,14 @@
+# Fichiers de l'environnement virtuel
+venv/
+__pycache__/
+
+# Base de données SQLite
+database.db
+*.sqlite3
+
+# Fichiers de configuration sensibles
+.env
+
+# Fichiers système
+.DS_Store
+Thumbs.db
