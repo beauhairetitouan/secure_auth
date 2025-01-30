@@ -24,6 +24,7 @@ class User(db.Model, UserMixin):
 def load_user(user_id):
     return User.query.get(int(user_id))
 
+
 # Création de la base de données si elle n'existe pas encore
 with app.app_context():
     db.create_all()
