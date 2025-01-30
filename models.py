@@ -14,15 +14,20 @@ login_manager = LoginManager(app)
 login_manager.login_view = "login"  # Redirection en cas de tentative d'accès non autorisé
 
 # Définition du modèle utilisateur
-class User(db.Model, UserMixin):
+class User(db.Model, UserMixin):  # Inherit from UserMixin to get the default implementations
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(20), unique=True, nullable=False)
     email = db.Column(db.String(120), unique=True, nullable=False)
     password = db.Column(db.String(60), nullable=False)
+    is_active_account = db.Column(db.Boolean, default=True)  # Custom property to represent an active account
 
-@login_manager.user_loader
-def load_user(user_id):
-    return User.query.get(int(user_id))
+    # The 'get_id' method is automatically provided by UserMixin
+    # No need to implement it yourself unless you want custom behavior.
+
+    # Optional: You can implement any custom properties here if needed
+    def is_active(self):
+        return self.is_active_account  # Custom check for account activation
+    
 
 
 # Création de la base de données si elle n'existe pas encore

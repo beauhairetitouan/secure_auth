@@ -3,7 +3,7 @@ from flask_login import LoginManager, login_user, logout_user, login_required
 from flask_limiter import Limiter
 from flask_limiter.util import get_remote_address
 from flask_talisman import Talisman
-from models import db, bcrypt, User  # Assurez-vous que l'importation de l'instance db et bcrypt se fait depuis models.py
+from models import db, bcrypt, User
 from forms import RegistrationForm, LoginForm
 
 # Initialiser l'application Flask
@@ -19,6 +19,11 @@ db.init_app(app)  # Assurez-vous d'initialiser db si ce n'est pas fait dans mode
 bcrypt.init_app(app)  # Initialiser bcrypt pour l'application
 login_manager = LoginManager(app)
 login_manager.login_view = "login"  # Spécifie la vue à rediriger si l'utilisateur n'est pas connecté
+
+# Définir le user_loader pour Flask-Login
+@login_manager.user_loader
+def load_user(user_id):
+    return User.query.get(int(user_id))  # Charger l'utilisateur à partir de son ID
 
 # Définir les routes
 @app.route("/")
