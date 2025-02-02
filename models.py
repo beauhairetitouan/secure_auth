@@ -17,7 +17,6 @@ login_manager.login_view = "login"  # Redirection en cas de tentative d'accès n
 class User(db.Model, UserMixin):  # Inherit from UserMixin to get the default implementations
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(20), unique=True, nullable=False)
-    email = db.Column(db.String(120), unique=True, nullable=False)
     password = db.Column(db.String(60), nullable=False)
     is_active_account = db.Column(db.Boolean, default=True)  # Custom property to represent an active account
 
@@ -27,6 +26,9 @@ class User(db.Model, UserMixin):  # Inherit from UserMixin to get the default im
     # Optional: You can implement any custom properties here if needed
     def is_active(self):
         return self.is_active_account  # Custom check for account activation
+    
+
+
     
 
 
