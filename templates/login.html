@@ -3,15 +3,28 @@
 
 <head>
     <title>Connexion</title>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="{{ url_for('static', filename='login.css') }}">
 </head>
 
 <body>
+    <img src="{{ url_for('static', filename='favicon.webp') }}" alt="Logo sécurisé" width="150" height="150">
     <h2>Connexion</h2>
     <form method="POST">
         {{ form.hidden_tag() }}
-        {{ form.username.label }} {{ form.username() }} <br>
-        {{ form.password.label }} {{ form.password() }} <br>
-        {{ form.submit() }}
+        <div>
+            {{ form.username.label }} {{ form.username() }}
+        </div>
+        <div>
+            {{ form.password.label }} {{ form.password() }}
+        </div>
+        <div class="button-container">
+            <button type="reset">Réinitialiser</button>
+            {{ form.submit() }}
+            <a href="{{ url_for('register') }}">
+                <button type="button">S'inscrire</button>
+            </a>
+        </div>
     </form>
 </body>
 
