@@ -120,6 +120,7 @@ python app.py --ssl
 - **Sécurisation des en-têtes** avec **Flask-Talisman**
 - **Limitation des tentatives de connexion** avec **Flask-Limiter**
 - **Gestion des sessions utilisateur** avec **Flask-Login**
+- **Gestion des inscriptions et connexions de masse** avec **Google-Recaptcha** 
 
 ---
 

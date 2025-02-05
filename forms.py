@@ -27,6 +27,6 @@ class RegistrationForm(FlaskForm):
 class LoginForm(FlaskForm):
     username = StringField("Nom d'utilisateur", validators=[DataRequired(), Length(min=3, max=20)])
     password = PasswordField("Mot de passe", validators=[DataRequired()])
-    recaptcha = RecaptchaField(validators=[DataRequired()])
+    recaptcha = RecaptchaField()
     submit = SubmitField("Se connecter")
 
