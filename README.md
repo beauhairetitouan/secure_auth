@@ -12,6 +12,7 @@ Une application web Flask permettant aux utilisateurs de s'inscrire et de se con
 - 📂 Base de données **SQLAlchemy (SQLite/PostgreSQL)**
 - 🔄 Gestion des sessions utilisateur
 - 📊 Logging des connexions pour la sécurité
+- 🤖 Captcha pour éviter les inscriptions et connexions en masse
 
 ---
 
