@@ -12,14 +12,44 @@
     <h2>Inscription</h2>
     <form method="POST">
         {{ form.hidden_tag() }}
+
         <div>
-            {{ form.username.label }} {{ form.username() }}
+            <label for="username">{{ form.username.label }}</label>
+            {{ form.username() }}
+            {% if form.username.errors %}
+            <ul>
+                {% for error in form.username.errors %}
+                <li style="color:red;">{{ error }}</li>
+                {% endfor %}
+            </ul>
+            {% endif %}
+        </div>
+
+        <div>
+            <label for="password">{{ form.password.label }}</label>
+            {{ form.password() }}
+            {% if form.password.errors %}
+            <ul>
+                {% for error in form.password.errors %}
+                <li style="color:red;">{{ error }}</li>
+                {% endfor %}
+            </ul>
+            {% endif %}
+        </div>
+
+        <div>
+            <label for="confirm_password">{{ form.confirm_password.label }}</label>
+            {{ form.confirm_password() }}
+            {% if form.confirm_password.errors %}
+            <ul>
+                {% for error in form.confirm_password.errors %}
+                <li style="color:red;">{{ error }}</li>
+                {% endfor %}
+            </ul>
+            {% endif %}
         </div>
         <div>
-            {{ form.password.label }} {{ form.password() }}
-        </div>
-        <div>
-            {{ form.confirm_password.label }} {{ form.confirm_password() }}
+            {{ form.recaptcha.label }} {{ form.recaptcha() }}
         </div>
         <div class="button-container">
             {{ form.submit() }}

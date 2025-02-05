@@ -12,6 +12,22 @@ img {
     border-radius: 10px;
 }
 
+.danger {
+    color: white;
+    background-color: red;
+    padding: 10px;
+    margin-bottom: 15px;
+    border-radius: 5px;
+}
+
+.success {
+    color: white;
+    background-color: green;
+    padding: 10px;
+    margin-bottom: 15px;
+    border-radius: 5px;
+}
+
 
 form {
     background: white;
