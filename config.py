@@ -16,4 +16,5 @@ class Config:
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     RECAPTCHA_PUBLIC_KEY = os.getenv("RECAPTCHA_PUBLIC_KEY")
     RECAPTCHA_PRIVATE_KEY = os.getenv("RECAPTCHA_PRIVATE_KEY")
+    REDIS_URL = os.getenv('REDIS_URL', 'redis://localhost:6379/0') 
 

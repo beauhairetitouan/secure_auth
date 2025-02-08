@@ -3,39 +3,59 @@ from flask_login import LoginManager, login_user, logout_user, login_required, c
 from flask_limiter import Limiter
 from flask_limiter.util import get_remote_address
 from flask_talisman import Talisman
+from redis import Redis
 from models import db, bcrypt, User
 from forms import RegistrationForm, LoginForm
 
+# Créer l'application Flask
 app = Flask(__name__)
-app.config.from_object("config.Config")
+app.config.from_object("config.Config")  # Charger la configuration depuis config.py
 
+# Connexion Redis
+redis = Redis.from_url(app.config["REDIS_URL"])  # Utilisation de REDIS_URL de config.py
+
+# Limites de requêtes avec Flask-Limiter
+limiter = Limiter(get_remote_address, app=app)
+
+# Configurer Redis comme backend pour Flask-Limiter via la configuration
+app.config['REDIS_STORAGE'] = redis  # Ajouter Redis comme backend dans la configuration
+
+# Sécurisation avec Flask-Talisman
 Talisman(app, content_security_policy=None)
-limiter = Limiter(get_remote_address, app=app, default_limits=["5 per minute"])
 
+# Configurer le Limiter avec la nouvelle configuration
+limiter.init_app(app)
+
+# Initialisation des extensions Flask
 db.init_app(app)
 bcrypt.init_app(app)
 login_manager = LoginManager(app)
 login_manager.login_view = "login"
 
+# Fonction de chargement de l'utilisateur
 @login_manager.user_loader
 def load_user(user_id):
     return User.query.get(int(user_id))
 
+# Route d'accueil
 @app.route("/")
 def home():
     if current_user.is_authenticated:
         return redirect(url_for("dashboard"))
     return redirect(url_for("login"))
 
+# Dashboard (protégé par login)
 @app.route("/dashboard")
 @login_required
 def dashboard():
     return render_template("dashboard.html", user=current_user)
 
+# Favicon
 @app.route('/favicon.ico')
 def favicon():
     return send_from_directory(current_app.root_path + '/static', 'favicon.ico')
 
+# Route d'inscription
 @app.route("/register", methods=["GET", "POST"])
 def register():
     form = RegistrationForm()
@@ -48,6 +68,7 @@ def register():
         return redirect(url_for("login"))
     return render_template("register.html", form=form)
 
+# Route de connexion
 @app.route("/login", methods=["GET", "POST"])
 @limiter.limit("5 per minute")
 def login():
@@ -64,7 +85,7 @@ def login():
             flash("Aucun utilisateur trouvé avec cet identifiant. Veuillez vérifier votre nom d'utilisateur.", "danger")
     return render_template("login.html", form=form)
 
-
+# Route de déconnexion
 @app.route("/logout")
 @login_required
 def logout():
@@ -72,6 +93,7 @@ def logout():
     flash("Vous êtes déconnecté.", "info")
     return redirect(url_for("login"))
 
+# Gestion des erreurs 404 et 500
 @app.errorhandler(404)
 def page_not_found(error):
     return render_template('404.html'), 404
@@ -80,8 +102,10 @@ def page_not_found(error):
 def internal_server_error(error):
     return render_template('500.html'), 500
 
+# Démarrer l'application en SSL via Gunicorn
 if __name__ == "__main__":
     try:
-        app.run(debug=False, ssl_context=('server.crt', 'server.key'))
+        context = ('server.crt', 'server.key') 
+        app.run(debug=False, host="0.0.0.0", port=5001, ssl_context=context)
     except FileNotFoundError:
         print("⚠️ Certificat SSL non trouvé.")

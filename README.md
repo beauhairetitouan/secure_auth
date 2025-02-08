@@ -99,7 +99,7 @@ openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout server.key -out serv
 
 Puis lance Gunicorn avec SSL :
 ```bash
-gunicorn --certfile=server.crt --keyfile=server.key -b 0.0.0.0:5001 app:app
+gunicorn --certfile=server.crt --keyfile=server.key --bind 0.0.0.0:5001 app:app
 ```
 🚀 Gunicorn va lancer ton application avec HTTPS sur le port 5001.
 
