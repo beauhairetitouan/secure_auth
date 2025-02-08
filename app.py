@@ -82,7 +82,6 @@ def internal_server_error(error):
 
 if __name__ == "__main__":
     try:
-        app.run(debug=True, ssl_context=('server.crt', 'server.key'))
+        app.run(debug=False, ssl_context=('server.crt', 'server.key'))
     except FileNotFoundError:
-        print("⚠️ Certificat SSL non trouvé. Lancement en HTTP.")
-        app.run(debug=True)
+        print("⚠️ Certificat SSL non trouvé.")
