@@ -83,13 +83,9 @@ cp .env.example .env
 
 ## 🚦 Démarrer l'application
 
-### 🌍 Mode HTTP (développement)
-```bash
-flask run
-```
 
-### 🔐 Mode HTTPS (avec certificat local)
-Si tu veux exécuter Flask en HTTPS :
+### 🔐 Mode HTTPS (avec certificat local et Gunicorn)
+Si tu veux exécuter Flask en HTTPS avec Gunicorn, commence par créer ton certificat SSL (si ce n'est pas déjà fait) :
 
 #### 🖥 Windows (Git Bash ou WSL)
 ```bash
@@ -101,10 +97,11 @@ openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout server.key -out serv
 openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout server.key -out server.crt
 ```
 
-Puis exécute Flask en HTTPS :
+Puis lance Gunicorn avec SSL :
 ```bash
-python app.py --ssl
+gunicorn --certfile=server.crt --keyfile=server.key -b 0.0.0.0:5001 app:app
 ```
+🚀 Gunicorn va lancer ton application avec HTTPS sur le port 5001.
 
 > 📌 **Si `openssl` n'est pas installé** :
 > - **Windows** : Installe [OpenSSL for Windows](https://slproweb.com/products/Win32OpenSSL.html)
