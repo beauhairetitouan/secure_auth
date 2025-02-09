@@ -6,31 +6,40 @@ Une application web Flask permettant aux utilisateurs de s'inscrire et de se con
 
 ## 🚀 Fonctionnalités
 
-- ✅ Inscription et connexion sécurisées
-- 🔑 Authentification avec **Flask-Login**
-- 🔒 Sécurisation contre **XSS, CSRF, injections SQL**
-- 📂 Base de données **SQLAlchemy (SQLite/PostgreSQL)**
-- 🔄 Gestion des sessions utilisateur
-- 📊 Logging des connexions pour la sécurité
-- 🤖 Captcha pour éviter les inscriptions et connexions en masse
+- ✅ Système d'authentification complet (inscription, connexion, déconnexion)
+- 🔑 Authentification sécurisée avec **Flask-Login**
+- 🔒 Protection contre les attaques web courantes :
+- Protection XSS (Cross-Site Scripting)
+- Protection CSRF (Cross-Site Request Forgery)
+- Protection contre les injections SQL
+- Protection contre les attaques par force brute
+- 📂 Base de données sécurisée avec **SQLAlchemy**
+- 🔄 Gestion avancée des sessions utilisateur
+- 📊 Système de logging complet des tentatives de connexion
+- 🤖 Protection anti-bot avec **Google reCAPTCHA**
+- 🔐 Support HTTPS natif avec Gunicorn
+- ⚡ Limitation de taux avec **Redis** et **Flask-Limiter**
 
 ---
 
-## 📋 Prérequis
 
-1. **Python 3.8 ou supérieur**  
-   Vérifie l'installation :
-   ```bash
-   python --version
-   ```
-   - **Windows** : Télécharge [Python ici](https://www.python.org/downloads/)
-   - **Mac/Linux** : Utilise `brew install python3` ou `sudo apt install python3`
+### Logiciels requis
 
-2. **pip** (Gestionnaire de paquets Python)  
-   Vérifie avec :
-   ```bash
-   pip --version
-   ```
+- Python 3.8 ou supérieur
+- Redis (pour la limitation de taux)
+- OpenSSL (pour la génération des certificats)
+
+### Vérification des installations
+
+```bash
+# Vérifier Python
+python --version
+
+# Vérifier pip
+pip --version
+
+# Vérifier Redis
+redis-cli ping  # Devrait répondre "PONG"
 
 ---
 
@@ -42,82 +51,94 @@ git clone https://github.com/beauhairetitouan/secure_auth.git
 cd secure_auth
 ```
 
-### 2️⃣ Créer et activer l'environnement virtuel
+#### Installation des prérequis manquants
 
-#### 🖥 **Windows (cmd/Powershell)**
-```powershell
+##### Python et pip
+- **Windows** : Téléchargez depuis [python.org](https://www.python.org/downloads/)
+- **macOS** : `brew install python3`
+- **Linux** : `sudo apt install python3 python3-pip`
+
+##### Redis
+- **Windows** : Utilisez [WSL2](https://redis.io/docs/getting-started/installation/install-redis-on-windows/) ou [Memurai](https://www.memurai.com/)
+- **macOS** : `brew install redis && brew services start redis`
+- **Linux** : `sudo apt install redis-server && sudo systemctl start redis-server`
+
+##### OpenSSL
+- **Windows** : Installez [OpenSSL pour Windows](https://slproweb.com/products/Win32OpenSSL.html)
+- **macOS** : `brew install openssl`
+- **Linux** : `sudo apt install openssl`
+
+## 🛠 Installation
+
+1. **Cloner le dépôt**
+```bash
+git clone https://github.com/beauhairetitouan/secure_auth.git
+cd secure_auth
+```
+
+2. **Créer et activer l'environnement virtuel**
+
+```bash
+# Windows
 python -m venv venv
 venv\Scripts\activate
-```
 
-#### 🍏 **Mac**
-```bash
+# macOS/Linux
 python3 -m venv venv
 source venv/bin/activate
 ```
 
-#### 🐧 **Linux**
-```bash
-python3 -m venv venv
-source venv/bin/activate
-```
-
-> ⚠️ **Si `python3` n'est pas trouvé**, essaie `python` à la place.
-
----
-
-### 3️⃣ Installer les dépendances
+3. **Installer les dépendances**
 ```bash
 pip install -r requirements.txt
 ```
 
-### 4️⃣ Configurer l'environnement
-Copie le fichier `.env.example` en `.env` et modifie les valeurs :
+4. **Configuration**
 ```bash
+# Copier le fichier de configuration exemple
 cp .env.example .env
+
+# Éditer le fichier .env avec vos paramètres
 ```
-> **Modifie `.env` pour inclure tes configurations (clé secrète, base de données, etc.).**
 
 ---
 
 
-## 🚦 Démarrer l'application
+## 🚦 Démarrage
 
-
-### 🔐 Mode HTTPS (avec certificat local et Gunicorn)
-Si tu veux exécuter Flask en HTTPS avec Gunicorn, commence par créer ton certificat SSL (si ce n'est pas déjà fait) :
-
-#### 🖥 Windows (Git Bash ou WSL)
+### Génération du certificat SSL
 ```bash
 openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout server.key -out server.crt
 ```
 
-#### 🍏 Mac / 🐧 Linux
-```bash
-openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout server.key -out server.crt
-```
-
-Puis lance Gunicorn avec SSL :
+### Lancement avec Gunicorn (HTTPS)
 ```bash
 gunicorn --certfile=server.crt --keyfile=server.key --bind 0.0.0.0:5001 app:app
 ```
-🚀 Gunicorn va lancer ton application avec HTTPS sur le port 5001.
 
-> 📌 **Si `openssl` n'est pas installé** :
-> - **Windows** : Installe [OpenSSL for Windows](https://slproweb.com/products/Win32OpenSSL.html)
-> - **Mac** : `brew install openssl`
-> - **Linux** : `sudo apt install openssl` (Debian/Ubuntu) ou `sudo dnf install openssl` (Fedora)
+L'application sera accessible à l'adresse : `https://localhost:5001`
+
 
 ---
 
 ## 🔒 Sécurité intégrée
 
-- **Hachage des mots de passe** avec **bcrypt**
-- **Protection CSRF** avec **Flask-WTF**
-- **Sécurisation des en-têtes** avec **Flask-Talisman**
-- **Limitation des tentatives de connexion** avec **Flask-Limiter**
-- **Gestion des sessions utilisateur** avec **Flask-Login**
-- **Gestion des inscriptions et connexions de masse** avec **Google-Recaptcha** 
+### Authentification
+- Hachage des mots de passe avec bcrypt
+- Gestion sécurisée des sessions avec Flask-Login
+- Protection contre la force brute avec Redis et Flask-Limiter
+
+### Protection contre les attaques
+- En-têtes de sécurité avec Flask-Talisman
+- Tokens CSRF avec Flask-WTF
+- Validation stricte des entrées
+- Protection XSS via l'échappement automatique
+- Limitation des tentatives de connexion
+
+### Gestion des sessions
+- Sessions chiffrées côté serveur
+- Rotation automatique des sessions
+- Invalidation sécurisée à la déconnexion
 
 ---
 
@@ -166,6 +187,7 @@ secure_auth/
 ```
 
 ---
+
 
 ## 🤝 Contribution
 

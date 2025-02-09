@@ -11,14 +11,17 @@ from forms import RegistrationForm, LoginForm
 app = Flask(__name__)
 app.config.from_object("config.Config")  # Charger la configuration depuis config.py
 
-# Connexion Redis
-redis = Redis.from_url(app.config["REDIS_URL"])  # Utilisation de REDIS_URL de config.py
+redis_client = Redis.from_url(app.config["REDIS_URL"])
 
-# Limites de requêtes avec Flask-Limiter
-limiter = Limiter(get_remote_address, app=app)
+# Configuration du Limiter
+limiter = Limiter(
+    app=app,
+    key_func=get_remote_address,
+    storage_uri=app.config["REDIS_URL"],  # Utilisez storage_uri au lieu de storage
+    storage_options={},
+    default_limits=["200 per day", "50 per hour"]
+)
 
-# Configurer Redis comme backend pour Flask-Limiter via la configuration
-app.config['REDIS_STORAGE'] = redis  # Ajouter Redis comme backend dans la configuration
 
 # Sécurisation avec Flask-Talisman
 Talisman(app, content_security_policy=None)
