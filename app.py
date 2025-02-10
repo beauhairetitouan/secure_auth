@@ -109,6 +109,6 @@ def internal_server_error(error):
 if __name__ == "__main__":
     try:
         context = ('server.crt', 'server.key') 
-        app.run(debug=False, host="0.0.0.0", port=5001, ssl_context=context)
+        app.run(debug=False, host="localhost", port=5001, ssl_context=context)
     except FileNotFoundError:
         print("⚠️ Certificat SSL non trouvé.")

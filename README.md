@@ -113,7 +113,7 @@ openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout server.key -out serv
 
 ### Lancement avec Gunicorn (HTTPS)
 ```bash
-gunicorn --certfile=server.crt --keyfile=server.key --bind 0.0.0.0:5001 app:app
+gunicorn --certfile=server.crt --keyfile=server.key --bind localhost:5001 app:app
 ```
 
 L'application sera accessible à l'adresse : `https://localhost:5001`
