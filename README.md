@@ -116,6 +116,8 @@ openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout server.key -out serv
 gunicorn --certfile=server.crt --keyfile=server.key --bind localhost:5001 app:app
 ```
 
+Avec un certificat auto-signé, le navigateur ne le reconnait pas. Pour une mise en production, il faut générer un certificat SSL/TLS valide par une autorité de certification reconnue.
+
 L'application sera accessible à l'adresse : `https://localhost:5001`
 
 
