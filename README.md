@@ -40,16 +40,8 @@ pip --version
 
 # Vérifier Redis
 redis-cli ping  # Devrait répondre "PONG"
-
----
-
-## 🛠 Installation du projet
-
-### 1️⃣ Cloner le dépôt
-```bash
-git clone https://github.com/beauhairetitouan/secure_auth.git
-cd secure_auth
 ```
+---
 
 #### Installation des prérequis manquants
 
